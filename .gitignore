@@ -32,3 +32,8 @@
 *.app
 
 build
+
+# dependent packages
+inc/*
+
+.vscode

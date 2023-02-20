@@ -5,6 +5,6 @@
 int main()
 {
     Family family;
-    family.generate("../Sample.txt");    
+    family.generate("../Sample.json");    
     return 0;
 }

@@ -1,5 +1,0 @@
-# Sample Family
-
-Ned Stark (M)
-Catelyn Stark (F)
-    Rob Stark (M)

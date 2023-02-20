@@ -1,0 +1,34 @@
+{
+    "Families" : [
+        {
+            "Ned Stark" : {
+                "parent" : true,
+                "sex" : "M"
+            },
+            "Catelyn Stark" : {
+                "parent" : true,
+                "sex" : "F"
+            },
+            "Rob Stark" : {
+                "parent" : false,
+                "sex" : "M"
+            },
+            "Sansa Stark" : {
+                "parent" : false,
+                "sex" : "F"
+            },
+            "Bran Stark" : {
+                "parent" : false,
+                "sex" : "M"
+            },
+            "Arya Stark" : {
+                "parent" : false,
+                "sex" : "F"
+            },
+            "Rickon Stark" : {
+                "parent" : false,
+                "sex" : "M"
+            }
+        }
+    ]
+}

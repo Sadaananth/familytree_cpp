@@ -11,5 +11,5 @@ public:
 
     void generate(const std::string& filename);
 private:
-    std::vector<Person> person;
+    std::vector<Person> m_person_list;
 };
