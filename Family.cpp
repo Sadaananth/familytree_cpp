@@ -18,9 +18,20 @@ void Family::generate(const std::string& filename)
     std::ifstream stream(filename);
 
     if (stream.is_open()) {
-        std::string str((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
-        auto itr = nlohmann::json::parse(str);
+        
+        nlohmann::json input_json;
+        stream >> input_json;
+
+        if(input_json.contains("Families")) {
+            
+            auto person_list = input_json["Families"];
+            for(auto each : person_list) {
+                Person person;
+                Person::from_json(each, person);
+            }
+        }
         stream.close();
+    
     } else {
         std::cout << "File is not open" << std::endl;
     }
