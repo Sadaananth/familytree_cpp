@@ -1,46 +1,45 @@
 {
     "Families" : [
         {
-            "Ned Stark" : {
-                "parent" : true,
-                "sex" : "M"
-            }
-        },
-        {
-            "Catelyn Stark" : {
-                "parent" : true,
-                "sex" : "F"
-            }
-        },
-        {
-            "Rob Stark" : {
-                "parent" : false,
-                "sex" : "M"
-            }
-        },
-        {
-            "Sansa Stark" : {
-                "parent" : false,
-                "sex" : "F"
-            }
-        },
-        {
-            "Bran Stark" : {
-                "parent" : false,
-                "sex" : "M"
-            }
-        },
-        {
-            "Arya Stark" : {
-                "parent" : false,
-                "sex" : "F"
-            }
-        },
-        {
-            "Rickon Stark" : {
-                "parent" : false,
-                "sex" : "M"
-            }
+            "name" : "Stark",
+            "members" : [
+                {
+                    "name" : "Ned",
+                    "parent" : true,
+                    "sex" : "M"
+                },
+                {
+                    "name" : "Catelyn",
+                    "parent" : true,
+                    "sex" : "F",
+                    "bornfamily" : "Tully"
+                },
+                {
+                    "name" : "Rob",
+                    "parent" : false,
+                    "sex" : "M"
+                },
+                {
+                    "name" : "Sansa",
+                    "parent" : false,
+                    "sex" : "F"
+                },
+                {
+                    "name" : "Bran",
+                    "parent" : false,
+                    "sex" : "M"
+                },
+                {
+                    "name" : "Arya",
+                    "parent" : false,
+                    "sex" : "F"
+                },
+                {
+                    "name" : "Rickon",
+                    "parent" : false,
+                    "sex" : "M"
+                }
+            ]
         }
     ]
 }

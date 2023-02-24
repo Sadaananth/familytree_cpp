@@ -15,11 +15,13 @@ public:
     static void to_json(nlohmann::json& j, const Person& p);
     static void from_json(const nlohmann::json& j, Person& p);
 
-private:
-    void parse_and_fill(const std::string& line);
+    void set_family_name(const std::string& family_name);
 
+private:
     uint32_t m_id;
     std::string m_name;
+    bool m_is_parent;
+    std::string m_sex;
     std::string m_familyname;
     std::string m_villagename;
 };

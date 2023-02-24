@@ -9,7 +9,10 @@ public:
     Family();
     ~Family() {}
 
-    void generate(const std::string& filename);
+    static void from_json(const nlohmann::json& j, Family& family);
 private:
-    std::vector<Person> m_person_list;
+    std::vector<Person> m_persons_list;
+
+    std::string m_family_name;
+
 };

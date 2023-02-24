@@ -1,10 +1,10 @@
-#include "Family.hpp"
+#include "FamilyTree.hpp"
 
 #include <iostream>
 
 int main()
 {
-    Family family;
-    family.generate("../Sample.json");    
+    FamilyTree family_tree;
+    family_tree.generate("../myfamily.json");    
     return 0;
 }

@@ -7,7 +7,8 @@ set(INC ${PROJECT_SOURCE_DIR}/inc/)
 set(SOURCES
 ${PROJECT_SOURCE_DIR}/main.cpp
 ${PROJECT_SOURCE_DIR}/Family.cpp
-${PROJECT_SOURCE_DIR}/Person.cpp)
+${PROJECT_SOURCE_DIR}/Person.cpp
+${PROJECT_SOURCE_DIR}/FamilyTree.cpp)
 
 add_custom_target(
     prebuild
