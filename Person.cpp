@@ -32,3 +32,8 @@ void Person::set_family_name(const std::string& family_name)
 {
     m_familyname = family_name;
 }
+
+const std::string& Person::name() const
+{
+    return m_name;
+}

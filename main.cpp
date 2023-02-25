@@ -5,6 +5,6 @@
 int main()
 {
     FamilyTree family_tree;
-    family_tree.generate("../myfamily.json");    
+    family_tree.generate("../myfamily.json");
     return 0;
 }

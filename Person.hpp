@@ -17,6 +17,8 @@ public:
 
     void set_family_name(const std::string& family_name);
 
+    const std::string& name() const;
+
 private:
     uint32_t m_id;
     std::string m_name;

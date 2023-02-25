@@ -10,6 +10,8 @@ public:
     ~Family() {}
 
     static void from_json(const nlohmann::json& j, Family& family);
+
+    void get_stream(std::stringstream& stream);
 private:
     std::vector<Person> m_persons_list;
 
