@@ -2,6 +2,12 @@
 #include "Utils.hpp"
 #include <iostream>
 
+namespace {
+    std::string get_helper(const std::string& name) {
+        return std::string("\"") + name + std::string("\"") + std::string(" [ style=invis ]\n");
+    }
+}
+
 Family::Family()
 {
 
@@ -32,13 +38,21 @@ void Family::from_json(const nlohmann::json& json, Family& family)
 
 void Family::get_stream(std::stringstream& stream)
 {
-    for(auto parent : m_parent_list) {
-
+    auto helper_node = "helper";
+    stream << "{\nrank = same\n";
+    stream << get_helper(helper_node);
+    for(auto parent: m_parent_list) {
+        stream << "\"" << parent.name() << "\" -- \"" << helper_node << "\"\n";
     }
+    stream << "}\n";
 
-    for(auto parent : m_parent_list) {
-        for(auto children : m_children_list) {
-            stream << "\"" << parent.name() << "\" -- \"" << children.name() << "\"\n";
-        }
+    auto helper_node2 = "helper2";
+    stream << "{\n\"" << helper_node2 << "\" [ style=invis] \n";
+    stream << "\"" << helper_node << "\" -- \"" << helper_node2 << "\"}\n";
+
+    stream << "{\n";
+    for(auto children : m_children_list) {
+        stream << "\"" << helper_node2 << "\" -- \"" << children.name() << "\"\n";
     }
+    stream << "}\n";
 }
