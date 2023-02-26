@@ -36,14 +36,16 @@ void FamilyTree::generate(const std::string& filename)
         }
 
         std::stringstream outputstream;
-        outputstream << "digraph myfamily { \n";
+        outputstream << "graph myfamily { \n";
+        outputstream << "node [ shape=square ]\n";
         for(auto& family : m_family_list) {
             family.get_stream(outputstream);
         }
         outputstream << "}\n";
 
-        std::cout << "\n\n";
-        std::cout << outputstream.str() << std::endl;
+        std::ofstream ofstream("output.txt");
+        ofstream << outputstream.str() << std::endl;
+        ofstream.close();
     
     } else {
         std::cout << "File is not open" << std::endl;

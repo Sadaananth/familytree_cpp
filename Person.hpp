@@ -19,6 +19,8 @@ public:
 
     const std::string& name() const;
 
+    bool is_parent() const;
+
 private:
     uint32_t m_id;
     std::string m_name;

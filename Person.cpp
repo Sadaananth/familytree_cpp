@@ -37,3 +37,8 @@ const std::string& Person::name() const
 {
     return m_name;
 }
+
+bool Person::is_parent() const
+{
+    return m_is_parent;
+}
