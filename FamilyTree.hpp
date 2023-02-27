@@ -1,7 +1,9 @@
 #pragma once
 
-#include <vector>
+#include <map>
+#include <memory>
 #include "Family.hpp"
+#include "Person.hpp"
 
 class FamilyTree
 {
@@ -10,6 +12,9 @@ public:
     ~FamilyTree() {}
 
     void generate(const std::string& filename);
+
+    void display();
 private:
-    std::vector<Family> m_family_list;
+
+    std::map<std::string, std::shared_ptr<Person>> m_persons_map;
 };

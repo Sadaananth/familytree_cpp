@@ -1,8 +1,28 @@
 #pragma once
 
 #include "inc/json.hpp"
+#include <optional>
+#include <map>
 
 namespace utils {
+
+template<typename type>
+void updateOnDiff(const type& input, type& output)
+{
+    if(input != output) {
+        output = input;
+    }
+}
+
+template<typename MapType>
+std::optional<typename MapType::mapped_type> getFromMapOrOptional(const MapType& map, typename MapType::key_type key)
+{
+    if(auto itr = map.find(key); itr != map.end()) {
+        return std::make_optional(itr->second);
+    }
+
+    return std::nullopt;
+}
 
 template<typename fieldType>
 void fillFromJson(nlohmann::json json, const std::string& key, fieldType& field)

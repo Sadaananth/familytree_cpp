@@ -6,8 +6,8 @@ set(INC ${PROJECT_SOURCE_DIR}/inc/)
 
 set(SOURCES
 ${PROJECT_SOURCE_DIR}/main.cpp
-${PROJECT_SOURCE_DIR}/Family.cpp
 ${PROJECT_SOURCE_DIR}/Person.cpp
+${PROJECT_SOURCE_DIR}/Family.cpp
 ${PROJECT_SOURCE_DIR}/FamilyTree.cpp)
 
 add_custom_target(
@@ -16,5 +16,6 @@ add_custom_target(
 )
 
 add_executable(familytree ${SOURCES})
+set_property(TARGET familytree PROPERTY CXX_STANDARD 17)
 add_dependencies(familytree prebuild)
 target_include_directories(familytree PUBLIC ${PROJECT_SOURCE_DIR}/inc)

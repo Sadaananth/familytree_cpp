@@ -13,46 +13,50 @@ Family::Family()
 
 }
 
-void Family::from_json(const nlohmann::json& json, Family& family)
+void Family::from_json(const nlohmann::json& json, std::map<std::string, std::shared_ptr<Person>>& persons_map)
 {
-    utils::fillFromJson(json, "name", family.m_family_name);
+    std::string family_name;
+    utils::fillFromJson(json, "name", family_name);
 
     if(json.contains("members")) {
+        
+        std::vector<std::string> parents_list;
+        std::vector<std::string> children_list;
+        
         for(auto member : json["members"]) {
-            Person person;
-            person.set_family_name(family.m_family_name);
-            Person::from_json(member, person);
 
-            if(person.is_parent()) {
-                family.m_parent_list.emplace_back(person);
+            std::shared_ptr<Person> person = std::make_shared<Person>();
+            person->set_family_name(family_name);
+            person->from_json(member);
+
+            if(person->is_parent()) {
+                parents_list.emplace_back(person->name());
             } else {
-                family.m_children_list.emplace_back(person);
+                children_list.emplace_back(person->name());
             }
 
-            nlohmann::json person_json;
-            Person::to_json(person_json, person);
-            std::cout << person_json.dump(4) << std::endl;
+            if(auto person_old = utils::getFromMapOrOptional(persons_map, person->name()); person_old.has_value()) {
+                person_old.value()->update_person(person);
+                persons_map.erase(person->name());
+            }
+            persons_map[person->name()] = person;
+
+        }
+
+        for(auto parent : parents_list) {
+            if(auto parent_itr = utils::getFromMapOrOptional(persons_map, parent); parent_itr.has_value()) {
+                for(auto child : children_list) {
+                    parent_itr.value()->update_child(child);
+                }
+            }
+        }
+
+        for(auto child : children_list) {
+            if(auto child_itr = utils::getFromMapOrOptional(persons_map, child); child_itr.has_value()) {
+                for(auto parent : parents_list) {
+                    child_itr.value()->update_parent(parent);
+                }
+            }
         }
     }
-}
-
-void Family::get_stream(std::stringstream& stream)
-{
-    auto helper_node = "helper";
-    stream << "{\nrank = same\n";
-    stream << get_helper(helper_node);
-    for(auto parent: m_parent_list) {
-        stream << "\"" << parent.name() << "\" -- \"" << helper_node << "\"\n";
-    }
-    stream << "}\n";
-
-    auto helper_node2 = "helper2";
-    stream << "{\n\"" << helper_node2 << "\" [ style=invis] \n";
-    stream << "\"" << helper_node << "\" -- \"" << helper_node2 << "\"}\n";
-
-    stream << "{\n";
-    for(auto children : m_children_list) {
-        stream << "\"" << helper_node2 << "\" -- \"" << children.name() << "\"\n";
-    }
-    stream << "}\n";
 }
