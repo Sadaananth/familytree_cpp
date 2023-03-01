@@ -2,29 +2,22 @@
 
 #include <string>
 
+class LoggerImpl;
+
 class Logger
 {
 public:
-    Logger& create() 
-    {
-        static Logger logger;
-        return logger;
-    )
+    static Logger& create();
 
+    void log_error();
+    void log_warn();
+    void log_info();
+    void log_debug();
+
+    void add_sink();
 private:
-    Logger() {}
-    ~Logger() {}
+    Logger();
+    ~Logger();
 
-    enum class LogLevel : uint8_t {
-        error,
-        warn,
-        info,
-        debug
-    };
+    LoggerImpl& m_logger_pImpl;
 };
-
-template<typename out_stream>
-out_stream& operator<<(out_stream& stream, const Logger& logger)
-{
-    return out_stream;
-}
