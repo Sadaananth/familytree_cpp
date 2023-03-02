@@ -11,10 +11,15 @@ public:
     FamilyTree();
     ~FamilyTree() {}
 
-    void generate(const std::string& filename);
+    void read(const std::string& filename);
 
     void display();
+
+    void output_file(const std::string& filename);
+    void generate();
 private:
 
     std::map<std::string, std::shared_ptr<Person>> m_persons_map;
+
+    std::string m_output_file;
 };

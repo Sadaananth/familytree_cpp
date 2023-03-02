@@ -7,13 +7,14 @@ class LoggerImpl;
 class Logger
 {
 public:
-    static Logger& create();
+    static Logger& instance();
 
-    void log_error();
-    void log_warn();
-    void log_info();
-    void log_debug();
+    static Logger& log_error();
+    static Logger& log_warn();
+    static Logger& log_info();
+    static Logger& log_debug();
 
+    Logger& operator<<(const std::string& data);
     void add_sink();
 private:
     Logger();

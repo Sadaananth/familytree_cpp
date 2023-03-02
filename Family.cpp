@@ -41,6 +41,14 @@ void Family::from_json(const nlohmann::json& json, std::map<std::string, std::sh
                 parent_itr.value()->update_child(child);
             }
         }
+
+        for(auto spouse : parents_list) {
+            if(auto parent_itr = utils::getFromMapOrOptional(persons_map, parent); parent_itr.has_value()) {
+                if(spouse != parent) {
+                    parent_itr.value()->update_spouse(spouse);
+                }
+            }
+        }
     }
 
     for(auto child : children_list) {

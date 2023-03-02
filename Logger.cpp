@@ -112,7 +112,7 @@ void LoggerImpl::sink_output(const std::string& output_data)
 
 }
 
-Logger& Logger::create()
+Logger& Logger::instance()
 {
     static Logger logger;
     return logger;
@@ -133,22 +133,27 @@ void Logger::add_sink()
 
 }
 
-void Logger::log_error()
+Logger& Logger::log_error()
 {
-
+    return Logger::instance();
 }
 
-void Logger::log_warn()
+Logger& Logger::log_warn()
 {
-
+    return Logger::instance();
 }
 
-void Logger::log_info()
+Logger& Logger::log_info()
 {
-
+    return Logger::instance();
 }
 
-void Logger::log_debug()
+Logger& Logger::log_debug()
 {
+    return Logger::instance();
+}
 
+Logger& Logger::operator<<(const std::string& data)
+{    
+    return *this;
 }
