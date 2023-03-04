@@ -18,6 +18,7 @@ public:
     void output_file(const std::string& filename);
     void generate();
 private:
+    std::string find_root();
 
     std::map<std::string, std::shared_ptr<Person>> m_persons_map;
 

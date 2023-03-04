@@ -118,3 +118,23 @@ void Person::display() const
         displayValues("", spouse, 2);
     }
 }
+
+bool Person::has_parents() const
+{
+    return m_parents_list.size() > 0;
+}
+
+bool Person::has_spouse() const
+{
+    return m_spouse_list.size() > 0;
+}
+
+std::vector<std::string> Person::parent_list() const
+{
+    return m_parents_list;
+}
+
+std::vector<std::string> Person::spouse_list() const
+{
+    return m_spouse_list;
+}

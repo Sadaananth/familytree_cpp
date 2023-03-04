@@ -61,13 +61,34 @@ void FamilyTree::generate()
         throw std::runtime_error("Unable to open File " + m_output_file);
     }
 
-    stream << "{" << std::endl;
-
     stream << "graph myfamily {" << std::endl;
 
-    stream << "}" << std::endl;
+    if(m_persons_map.size() > 0) {
+        auto itr = m_persons_map.begin();
+        auto root_name = find_root(itr->second->name());
+    }
 
     stream << "}" << std::endl;
 
     stream.close();
+}
+
+std::string FamilyTree::find_root(const std::string& name)
+{
+    auto person = utils::getFromMapOrOptional(m_persons_map, name);
+    if(person.has_value()) {
+        if(person.value().has_parents()) {
+            for(auto parent = person.value().parent_list()) {
+                return find_root(parent);
+            }
+        }
+
+        if(person.value().has_spouse()) {
+            for(auto spouse = person.value().spouse_list()) {
+                return find_root(spouse);
+            }
+        }
+    } else {
+        return name;
+    }
 }

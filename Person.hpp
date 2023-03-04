@@ -27,6 +27,12 @@ public:
 
     void display() const;
 
+    bool has_parents() const;
+    bool has_spouse() const;
+
+    std::vector<std::string> parent_list() const;
+    std::vector<std::string> spouse_list() const;
+
 private:
     uint32_t m_id;
     std::string m_name;
