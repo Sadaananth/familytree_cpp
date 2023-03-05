@@ -19,6 +19,7 @@ public:
     void generate();
 private:
     std::string find_root(const std::string& name);
+    void draw_family(const std::string& name);
 
     std::map<std::string, std::shared_ptr<Person>> m_persons_map;
 

@@ -129,6 +129,11 @@ bool Person::has_spouse() const
     return m_spouse_list.size() > 0;
 }
 
+bool Person::has_children() const
+{
+    return m_children_list.size() > 0;
+}
+
 std::vector<std::string> Person::parent_list() const
 {
     return m_parents_list;
@@ -137,6 +142,11 @@ std::vector<std::string> Person::parent_list() const
 std::vector<std::string> Person::spouse_list() const
 {
     return m_spouse_list;
+}
+
+std::vector<std::string> Person::children_list() const
+{
+    return m_children_list;
 }
 
 bool Person::is_visited() const

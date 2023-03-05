@@ -66,7 +66,8 @@ void FamilyTree::generate()
 
     if(m_persons_map.size() > 0) {
         auto itr = m_persons_map.begin();
-        auto root_name = find_root(itr->second->name());
+        //auto root_name = find_root(itr->second->name());
+        draw_family(itr->second->name());
     }
 
     stream << "}" << std::endl;
@@ -77,8 +78,8 @@ void FamilyTree::generate()
 std::string FamilyTree::find_root(const std::string& name)
 {
     auto person = utils::getFromMapOrOptional(m_persons_map, name);
-    if(person.has_value() && !person.value().is_visited()) {
-        person.value().visited(true);
+    if(person.has_value() && !person.value()->is_visited()) {
+        person.value()->visited(true);
         if(person.value()->has_parents()) {
             for(auto parent : person.value()->parent_list()) {
                 return find_root(parent);
@@ -95,4 +96,45 @@ std::string FamilyTree::find_root(const std::string& name)
     }
 
     return "";
+}
+
+void FamilyTree::draw_family(const std::string& name)
+{
+    auto person = utils::getFromMapOrOptional(m_persons_map, name);
+    if(person.has_value() && !person.value()->is_visited()) {
+
+        std::cout << "{" << std::endl;
+        std::cout << name << std::endl;
+
+        person.value()->visited(true);
+
+        if(person.value()->has_spouse()) {
+            for(auto spouse : person.value()->spouse_list()) {
+                std::cout << spouse << std::endl;
+            }
+        }
+
+        if(person.value()->has_children()) {
+            for(auto child : person.value()->children_list()) {
+                std::cout << child << std::endl;
+            }
+        }
+
+        std::cout << "}" << std::endl;
+
+        if(person.value()->has_parents()) {
+            for(auto parent : person.value()->parent_list()) {
+                draw_family(parent);
+            }
+        }
+
+        if(person.value()->has_children()) {
+            for(auto child : person.value()->children_list()) {
+                draw_family(child);
+            }
+        }
+
+
+    }
+
 }

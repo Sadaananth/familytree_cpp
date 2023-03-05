@@ -29,9 +29,11 @@ public:
 
     bool has_parents() const;
     bool has_spouse() const;
+    bool has_children() const;
 
     std::vector<std::string> parent_list() const;
     std::vector<std::string> spouse_list() const;
+    std::vector<std::string> children_list() const;
 
     bool is_visited() const;
     void visited(bool visited);
