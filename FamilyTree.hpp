@@ -19,7 +19,9 @@ public:
     void generate();
 private:
     std::string find_root(const std::string& name);
-    void draw_family(const std::string& name);
+    void draw_family(const std::string& name, std::ofstream& stream);
+
+    bool is_any_spouse_visited(const std::shared_ptr<Person>& person);
 
     std::map<std::string, std::shared_ptr<Person>> m_persons_map;
 

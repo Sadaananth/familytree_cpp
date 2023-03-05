@@ -9,6 +9,13 @@
 
 #include "inc/json.hpp"
 
+namespace {
+    template<typename streamType>
+    void fill_relation(const std::string& first, const std::string& second, streamType& stream) {
+        stream << "\t\"" << first << "\" -- \"" << second << "\"" << std::endl;
+    }
+}
+
 FamilyTree::FamilyTree()
 {
 
@@ -67,7 +74,7 @@ void FamilyTree::generate()
     if(m_persons_map.size() > 0) {
         auto itr = m_persons_map.begin();
         //auto root_name = find_root(itr->second->name());
-        draw_family(itr->second->name());
+        draw_family(itr->second->name(), stream);
     }
 
     stream << "}" << std::endl;
@@ -98,43 +105,75 @@ std::string FamilyTree::find_root(const std::string& name)
     return "";
 }
 
-void FamilyTree::draw_family(const std::string& name)
+bool FamilyTree::is_any_spouse_visited(const std::shared_ptr<Person>& person)
 {
-    auto person = utils::getFromMapOrOptional(m_persons_map, name);
-    if(person.has_value() && !person.value()->is_visited()) {
-
-        std::cout << "{" << std::endl;
-        std::cout << name << std::endl;
-
-        person.value()->visited(true);
-
-        if(person.value()->has_spouse()) {
-            for(auto spouse : person.value()->spouse_list()) {
-                std::cout << spouse << std::endl;
+    if(person->has_spouse()) {
+        for(auto spouse : person->spouse_list()) {
+            auto spouse_itr = utils::getFromMapOrOptional(m_persons_map, spouse);
+            if(spouse_itr.has_value() && spouse_itr.value()->is_visited()) {
+                //std::cout << spouse << " visited for " << person->name() << std::endl;
+                return true;
             }
         }
-
-        if(person.value()->has_children()) {
-            for(auto child : person.value()->children_list()) {
-                std::cout << child << std::endl;
-            }
-        }
-
-        std::cout << "}" << std::endl;
-
-        if(person.value()->has_parents()) {
-            for(auto parent : person.value()->parent_list()) {
-                draw_family(parent);
-            }
-        }
-
-        if(person.value()->has_children()) {
-            for(auto child : person.value()->children_list()) {
-                draw_family(child);
-            }
-        }
-
-
     }
 
+    return false;
+}
+
+void FamilyTree::draw_family(const std::string& name, std::ofstream& stream)
+{
+    //std::cout << "Entering for " << name << std::endl;
+    auto person = utils::getFromMapOrOptional(m_persons_map, name);
+    if(person.has_value()) {
+
+        if(!person.value()->is_visited() && person.value()->has_spouse()) {
+
+            if(!is_any_spouse_visited(person.value())) {
+                stream << "{" << std::endl;
+                //std::cout << "\t" << name << std::endl;
+
+                person.value()->visited(true);
+
+                if(person.value()->has_spouse()) {
+                    for(auto spouse : person.value()->spouse_list()) {
+                        //std::cout << "\t" << spouse << std::endl;
+                        fill_relation(name, spouse, stream);
+                    }
+                }
+
+                if(person.value()->has_children()) {
+                    for(auto child : person.value()->children_list()) {
+                        //std::cout << "\t" << child << std::endl;
+                        fill_relation(name, child, stream);
+                    }
+                }
+
+                stream << "}" << std::endl;
+
+                if(person.value()->has_spouse()) {
+                    for(auto spouse : person.value()->spouse_list()) {
+                        //std::cout << "Searching " << spouse << " from " << name << std::endl;
+                        draw_family(spouse, stream);
+                    }
+                }
+
+                if(person.value()->has_children()) {
+                    for(auto child : person.value()->children_list()) {
+                        //std::cout << "Searching " << child << " from " << name << std::endl;
+                        draw_family(child, stream);
+                    }
+                }
+            }
+
+            if(person.value()->has_parents()) {
+                for(auto parent : person.value()->parent_list()) {
+                    //std::cout << "Searching " << parent << " from " << name << std::endl;
+                    draw_family(parent, stream);
+                }
+            }
+
+        } else {
+            //std::cout << "Skipping person " << name << std::endl;
+        }
+    }
 }
