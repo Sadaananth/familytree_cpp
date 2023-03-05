@@ -33,12 +33,16 @@ public:
     std::vector<std::string> parent_list() const;
     std::vector<std::string> spouse_list() const;
 
+    bool is_visited() const;
+    void visited(bool visited);
+
 private:
     uint32_t m_id;
     std::string m_name;
     std::string m_sex;
     std::string m_familyname;
     std::string m_villagename;
+    bool m_visited{false};
 
     std::vector<std::string> m_parents_list;
     std::vector<std::string> m_children_list;

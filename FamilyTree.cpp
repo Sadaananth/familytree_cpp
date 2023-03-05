@@ -1,4 +1,5 @@
 #include "FamilyTree.hpp"
+#include "Utils.hpp"
 
 #include <iostream>
 #include <string>
@@ -76,19 +77,22 @@ void FamilyTree::generate()
 std::string FamilyTree::find_root(const std::string& name)
 {
     auto person = utils::getFromMapOrOptional(m_persons_map, name);
-    if(person.has_value()) {
-        if(person.value().has_parents()) {
-            for(auto parent = person.value().parent_list()) {
+    if(person.has_value() && !person.value().is_visited()) {
+        person.value().visited(true);
+        if(person.value()->has_parents()) {
+            for(auto parent : person.value()->parent_list()) {
                 return find_root(parent);
             }
         }
 
-        if(person.value().has_spouse()) {
-            for(auto spouse = person.value().spouse_list()) {
+        if(person.value()->has_spouse()) {
+            for(auto spouse : person.value()->spouse_list()) {
                 return find_root(spouse);
             }
         }
     } else {
         return name;
     }
+
+    return "";
 }

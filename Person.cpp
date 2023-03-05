@@ -138,3 +138,13 @@ std::vector<std::string> Person::spouse_list() const
 {
     return m_spouse_list;
 }
+
+bool Person::is_visited() const
+{
+    return m_visited;
+}
+
+void Person::visited(bool visited)
+{
+    m_visited = visited;
+}
