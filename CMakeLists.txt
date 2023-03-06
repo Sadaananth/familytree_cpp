@@ -20,3 +20,5 @@ add_executable(familytree ${SOURCES})
 set_property(TARGET familytree PROPERTY CXX_STANDARD 17)
 add_dependencies(familytree prebuild)
 target_include_directories(familytree PUBLIC ${PROJECT_SOURCE_DIR}/inc)
+
+add_subdirectory(tests)

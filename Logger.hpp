@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 
 class LoggerImpl;
 
@@ -9,10 +10,10 @@ class Logger
 public:
     static Logger& instance();
 
-    static Logger& log_error();
-    static Logger& log_warn();
-    static Logger& log_info();
-    static Logger& log_debug();
+    static std::stringstream& log_error();
+    static std::stringstream& log_warn();
+    static std::stringstream& log_info();
+    static std::stringstream& log_debug();
 
     Logger& operator<<(const std::string& data);
     void add_sink();

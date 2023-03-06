@@ -2,9 +2,28 @@
 #include <thread>
 #include <queue>
 #include <iostream>
-#include <stringstream>
+#include <sstream>
 #include <mutex>
 #include <fstream>
+
+enum class LogLevel : uint8_t
+{
+    Error,
+    Warning,
+    Info,
+    Debug
+};
+
+class LogLineInfo
+{
+public:
+    LogLineInfo(LogLevel level, const std::string& filename, uint32_t lineno);
+
+private:
+    LogLevel m_log_level;
+    std::string m_file_name;
+    uint32_t m_line_no;
+};
 
 class LogSink
 {
@@ -40,7 +59,7 @@ class ConsoleSink : public LogSink
 {
 public:
     void print(const std::string& data) override;
-}
+};
 
 void ConsoleSink::print(const std::string& data)
 {
@@ -100,7 +119,8 @@ void LoggerImpl::run()
             std::string outptstring;
             {
                 std::lock_guard<std::mutex> lock(m_mutex);
-                outptstring = m_log_list.pop();
+                outptstring = m_log_list.front();
+                m_log_list.pop();
             }
             sink_output(outptstring);
         }
@@ -133,22 +153,22 @@ void Logger::add_sink()
 
 }
 
-Logger& Logger::log_error()
+std::stringstream& Logger::log_error()
+{
+    return Logger::instance().;
+}
+
+std::stringstream& Logger::log_warn()
 {
     return Logger::instance();
 }
 
-Logger& Logger::log_warn()
+std::stringstream& Logger::log_info()
 {
     return Logger::instance();
 }
 
-Logger& Logger::log_info()
-{
-    return Logger::instance();
-}
-
-Logger& Logger::log_debug()
+std::stringstream& Logger::log_debug()
 {
     return Logger::instance();
 }

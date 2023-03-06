@@ -126,9 +126,9 @@ void FamilyTree::draw_family(const std::string& name, std::ofstream& stream)
     auto person = utils::getFromMapOrOptional(m_persons_map, name);
     if(person.has_value()) {
 
-        if(!person.value()->is_visited() && person.value()->has_spouse()) {
+        if(!person.value()->is_visited()) {
 
-            if(!is_any_spouse_visited(person.value())) {
+            if(person.value()->has_spouse() && !is_any_spouse_visited(person.value())) {
                 stream << "{" << std::endl;
                 //std::cout << "\t" << name << std::endl;
 

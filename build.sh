@@ -4,6 +4,12 @@ buildType="RELEASE"
 
 if [ ! -z "$@" ];
 then
+	if [ "$1" = "clean" ];
+	then
+		rm -rf build
+		exit
+	fi
+
 	if [ "$1" = "g" ];
 	then
 		buildType="DEBUG"

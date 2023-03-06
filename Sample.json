@@ -2,7 +2,7 @@
     "Families" : [
         {
             "name" : "Stark",
-            "members" : [
+            "parents" : [
                 {
                     "name" : "Ned",
                     "parent" : true,
@@ -13,7 +13,9 @@
                     "parent" : true,
                     "sex" : "F",
                     "bornfamily" : "Tully"
-                },
+                }
+            ],
+            "children"  : [
                 {
                     "name" : "Rob",
                     "parent" : false,
