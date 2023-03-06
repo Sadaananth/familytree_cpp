@@ -116,13 +116,13 @@ void LoggerImpl::run()
     while(true) {
         if(!m_log_list.empty()) {
             
-            std::string outptstring;
+            std::string outputstring;
             {
                 std::lock_guard<std::mutex> lock(m_mutex);
-                outptstring = m_log_list.front();
+                outputstring = m_log_list.front();
                 m_log_list.pop();
             }
-            sink_output(outptstring);
+            sink_output(outputstring);
         }
     }
 }

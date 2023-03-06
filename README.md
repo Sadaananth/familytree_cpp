@@ -1,6 +1,10 @@
 # familytree_cpp
 
 # Compilation steps
-* Enter command `mkdir -p build; cd build; cmake ..`
-* Followed by `make && ./familytree`
-* Now run `dot -Tpng -o Sample.png`
+* Enter command `chmod +x build.sh; chmod +x generate.sh`
+* Enter command `./build.sh && ./generate.sh`
+
+# Output
+* Go to folder build and open  `output.png`
+
+![plot](./output.png)

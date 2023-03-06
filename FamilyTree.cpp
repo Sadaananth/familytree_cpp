@@ -5,14 +5,30 @@
 #include <string>
 #include <fstream>
 #include <streambuf>
-#include <regex>
+#include <sstream>
 
 #include "inc/json.hpp"
 
 namespace {
     template<typename streamType>
+    void fill_parent(const std::string& first, const std::string& helper, const std::string& second, streamType& stream) {
+        stream << "\t\t\"" << first << "\" -- \"" << helper << "\" -- \"" << second << "\"" << std::endl;
+        stream << "\t\t\"" << helper << "\" [shape=circle, label=\"\", style=invis, height=0.01, width=0.01]" << std::endl;
+    }
+
+    template<typename streamType>
     void fill_relation(const std::string& first, const std::string& second, streamType& stream) {
-        stream << "\t\"" << first << "\" -- \"" << second << "\"" << std::endl;
+        stream << "\t\t\"" << first << "\" -- \"" << second << "\"" << std::endl;
+    }
+
+    template<typename streamType>
+    void fill_children_helper(const std::string& first, const std::string& second, streamType& stream) {
+        if(first.empty()) {
+            stream << "\"" << second << "\"";
+            return;
+        }
+
+        stream << " -- \"" << second << "\"";
     }
 }
 
@@ -70,6 +86,7 @@ void FamilyTree::generate()
     }
 
     stream << "graph myfamily {" << std::endl;
+    stream << "node [shape=box]\n" << std::endl;
 
     if(m_persons_map.size() > 0) {
         auto itr = m_persons_map.begin();
@@ -130,25 +147,57 @@ void FamilyTree::draw_family(const std::string& name, std::ofstream& stream)
 
             if(person.value()->has_spouse() && !is_any_spouse_visited(person.value())) {
                 stream << "{" << std::endl;
+                stream << "\t{" << std::endl;
+                stream << "\t\trank=same;" << std::endl;
                 //std::cout << "\t" << name << std::endl;
 
                 person.value()->visited(true);
 
+                std::string parent_helper = name + "_";
+
                 if(person.value()->has_spouse()) {
                     for(auto spouse : person.value()->spouse_list()) {
                         //std::cout << "\t" << spouse << std::endl;
-                        fill_relation(name, spouse, stream);
+                        fill_parent(name, parent_helper, spouse, stream);
                     }
                 }
+
+                stream << "\t}" << std::endl;
+                stream << "\t{" << std::endl;
+                stream << "\t\trank=same;" << std::endl;
+
+                std::stringstream children_stream;
+                std::stringstream helper_stream;
 
                 if(person.value()->has_children()) {
+                    auto count = person.value()->children_list().size();
+                    auto index = 0;
+                    std::string joint_helper;
+                    std::string prev_helper = "";
                     for(auto child : person.value()->children_list()) {
+                        std::string child_helper = parent_helper + child + "_";
                         //std::cout << "\t" << child << std::endl;
-                        fill_relation(name, child, stream);
+                        //fill_relation(parent_helper, child, stream);
+                        fill_children_helper(prev_helper, child_helper, helper_stream);
+                        fill_relation(child_helper, child, children_stream);
+                        stream << "\t\t\"" << child_helper << "\" [shape=circle, label=\"\", style=invis, height=0.01, width=0.01]" << std::endl;
+                        if(index == (count/2)) {
+                            joint_helper = child_helper;
+                        }
+                        ++index;
+                        prev_helper = child_helper;
                     }
+
+                    children_stream << "\t{" << std::endl;
+                    //children_stream << "\t\trank=same;" << std::endl;
+                    fill_relation(parent_helper, joint_helper, children_stream);
+                    children_stream << "\t}" << std::endl;
                 }
 
-                stream << "}" << std::endl;
+                stream << "\t\t" << helper_stream.str() << std::endl;
+                stream << "\t}" << std::endl;
+                stream << children_stream.str() << std::endl;
+                stream << "\t}" << std::endl;
 
                 if(person.value()->has_spouse()) {
                     for(auto spouse : person.value()->spouse_list()) {
