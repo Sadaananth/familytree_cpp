@@ -1,13 +1,11 @@
 #include "FamilyTree.hpp"
-#include "Utils.hpp"
+#include "utils/Utils.hpp"
 
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <streambuf>
 #include <sstream>
-
-#include "inc/json.hpp"
 
 namespace {
     template<typename streamType>
@@ -188,10 +186,10 @@ void FamilyTree::draw_family(const std::string& name, std::ofstream& stream)
                         prev_helper = child_helper;
                     }
 
-                    children_stream << "\t{" << std::endl;
+                    //children_stream << "\t{" << std::endl;
                     //children_stream << "\t\trank=same;" << std::endl;
                     fill_relation(parent_helper, joint_helper, children_stream);
-                    children_stream << "\t}" << std::endl;
+                    //children_stream << "\t}" << std::endl;
                 }
 
                 stream << "\t\t" << helper_stream.str() << std::endl;
