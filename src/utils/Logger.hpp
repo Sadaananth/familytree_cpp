@@ -15,7 +15,6 @@ public:
     static std::stringstream& log_info();
     static std::stringstream& log_debug();
 
-    Logger& operator<<(const std::string& data);
     void add_sink();
 private:
     Logger();

@@ -14,16 +14,23 @@ enum class LogLevel : uint8_t
     Debug
 };
 
-class LogLineInfo
+struct LogLine
 {
-public:
-    LogLineInfo(LogLevel level, const std::string& filename, uint32_t lineno);
+    LogLine(LogLevel level, const std::string& filename, uint32_t lineno);
 
-private:
     LogLevel m_log_level;
     std::string m_file_name;
     uint32_t m_line_no;
+    std::stringstream m_line_stream;
 };
+
+LogLine::LogLine(LogLevel level, const std::string& filename, uint32_t lineno)
+    : m_log_level(level)
+    , m_file_name(filename)
+    , m_line_no(lineno)
+{
+
+}
 
 class LogSink
 {
@@ -71,13 +78,7 @@ class LoggerImpl
 public:
     static LoggerImpl& instance();
 
-    enum class LogLevel : uint8_t {
-        error,
-        warn,
-        info,
-        debug
-    };
-
+    std::stringstream& get_log_stream(LogLevel loglevel, const std::string& filename, uint32_t lineno);
 private:
     LoggerImpl();
     ~LoggerImpl() {}
@@ -88,7 +89,7 @@ private:
 
     std::thread m_thread;
 
-    std::queue<std::string> m_log_list;
+    std::queue<LogLine> m_log_list;
     std::mutex m_mutex;
 };
 
@@ -103,12 +104,26 @@ LoggerImpl::LoggerImpl()
     m_thread = std::thread(&LoggerImpl::run, this);
 }
 
+std::stringstream& LoggerImpl::get_log_stream(LogLevel loglevel, const std::string& filename, uint32_t lineno)
+{
+    std::cout << "Came here" << std::endl;
+    LogLine log_line(loglevel, filename, lineno);
+    auto& stream = log_line.m_line_stream;
+    
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        m_log_list.push(std::move(log_line));
+    }
+
+    std::cout << "returning stream" << std::endl;
+    return stream;
+}
+
 void LoggerImpl::log(LogLevel level)
 {
     std::stringstream stream;
 
-    std::lock_guard<std::mutex> lock(m_mutex);
-    m_log_list.push(stream.str());
+    
 }
 
 void LoggerImpl::run()
@@ -119,7 +134,7 @@ void LoggerImpl::run()
             std::string outputstring;
             {
                 std::lock_guard<std::mutex> lock(m_mutex);
-                outputstring = m_log_list.front();
+                //outputstring = m_log_list.front();
                 m_log_list.pop();
             }
             sink_output(outputstring);
@@ -155,25 +170,20 @@ void Logger::add_sink()
 
 std::stringstream& Logger::log_error()
 {
-    return Logger::instance().;
+    return Logger::instance().m_logger_pImpl.get_log_stream(LogLevel::Error, "", 20);
 }
 
 std::stringstream& Logger::log_warn()
 {
-    return Logger::instance();
+    return Logger::instance().m_logger_pImpl.get_log_stream(LogLevel::Warning, "", 20);
 }
 
 std::stringstream& Logger::log_info()
 {
-    return Logger::instance();
+    return Logger::instance().m_logger_pImpl.get_log_stream(LogLevel::Info, "", 20);
 }
 
 std::stringstream& Logger::log_debug()
 {
-    return Logger::instance();
-}
-
-Logger& Logger::operator<<(const std::string& data)
-{    
-    return *this;
+    return Logger::instance().m_logger_pImpl.get_log_stream(LogLevel::Debug, "", 20);
 }

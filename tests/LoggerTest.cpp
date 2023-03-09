@@ -1,7 +1,15 @@
-#include <Logger.hpp>
+#include <utils/Logger.hpp>
+#include <thread>
+#include <chrono>
 
 int main()
 {
-    Logger::log_debug() << "Inside main";
+    auto& test = Logger::log_debug();
+
+    test << "Main" << std::endl;
+
+    while(true) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
     return 0;
 }
