@@ -1,12 +1,16 @@
 #include "core/FamilyTree.hpp"
 
-#include <iostream>
+#include "Logger.hpp"
+
+using namespace Sada;
 
 int main(int argc, char**argv)
 {
-    std::string input_dir = "../";
     std::string input_file = "Sample.json";
     std::string output_file = "output.dot";
+
+    Logger::instance().add_sink(Logger::Sink::file, LogLevel::Info, "familytree.log");
+    Logger::instance().add_sink(Logger::Sink::console, LogLevel::Info);
 
     for(auto index = 1; index < argc; index++) {
         if(strcmp(argv[index], "-i") == 0) {
@@ -18,11 +22,11 @@ int main(int argc, char**argv)
         }
     }
 
-    std::cout << "Input File: " << input_file << std::endl;
-    std::cout << "Output File: " << output_file << std::endl;
+    LOG_INFO << "Input File: " << input_file;
+    LOG_INFO << "Output File: " << output_file;
 
     FamilyTree family_tree;
-    family_tree.read(input_dir + input_file);
+    family_tree.read(input_file);
     family_tree.output_file(output_file);
     //family_tree.display();
     family_tree.generate();

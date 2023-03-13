@@ -9,8 +9,10 @@ then
 	fi
 fi
 
-cd build
-./familytree -i "$inputFile" -o "output.dot"
+inputFilePath=$(readlink -f $inputFile)
+
+cd build/src/
+./familytreegen -i "$inputFilePath" -o "output.dot"
 
 cat output.dot | dot -Tpng -o output.png
 

@@ -1,6 +1,5 @@
 #include "Family.hpp"
 #include "utils/Utils.hpp"
-#include <iostream>
 
 namespace {
     std::string get_helper(const std::string& name) {

@@ -1,17 +1,21 @@
 #include "Person.hpp"
 #include "utils/Utils.hpp"
 
-#include <iostream>
+#include "Logger.hpp"
+
+using namespace Sada;
 
 namespace {
     template<typename titleType, typename dataType>
     void displayValues(const titleType& title, const dataType& data, uint32_t level)
     {
+        std::stringstream stream;
         for(auto i = 0; i < level; i++) {
-            std::cout << "\t";
+            stream << "\t";
         }
 
-        std::cout << title << ": " << data << std::endl;
+        stream << title << ": " << data;
+        LOG_DEBUG << stream.str();
     }
 }
 
